@@ -72,7 +72,7 @@ const ToDoList = () => {
   };
 
   return (
-     <div className="container bg-slate-300 shadow-xl rounded-lg mx-auto p-4">
+     <div className="container bg-white shadow-xl rounded-lg mx-auto md:p-3">
       <h1 className="md:text-2xl text-xl font-serif  font-bold mb-4">ToDo List</h1>
       <div className="mb-8">
         <h2 className="md:text-xl text-sm font-serif font-bold mb-2">Add Todo</h2>
@@ -81,16 +81,17 @@ const ToDoList = () => {
           placeholder="Todo Name"
           value={todoName}
           onChange={(e) => setTodoName(e.target.value)}
-          className="border rounded-md border-gray-300 px-3 py-2 rounded mr-2 focus:outline-none focus:border-blue-500"
+          className="border border-gray-300 m-1  px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-50 mr-2 focus:outline-none focus:border-indigo-500"
         />
         <input
           type="date"
           placeholder="Created For Date"
           value={createdForDate}
           onChange={(e) => setCreatedForDate(e.target.value)}
-          className="border border-gray-300 px-3 py-2 rounded mr-2 focus:outline-none focus:border-blue-500"
+          className="border border-gray-300 m-1  px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-50 mr-2 focus:outline-none focus:border-indigo-500"
         />
-        <button onClick={addTask} className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-6 py-3 rounded-full shadow-md hover:from-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white">
+        <div className='p-1' />
+        <button onClick={addTask} className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-6 py-3 rounded-xl shadow-md hover:from-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white">
           Add Task
         </button>
         {taskList.map((task, index) => (
@@ -100,21 +101,21 @@ const ToDoList = () => {
               placeholder="Task Title"
               value={task.title}
               onChange={(e) => handleTaskChange(index, 'title', e.target.value)}
-              className="border border-gray-300 px-3 py-2 rounded mr-2 focus:outline-none focus:border-indigo-500"
+              className="border border-gray-300 m-1  px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-50 mr-2 focus:outline-none focus:border-indigo-500"
             />
             <input
               type="text"
               placeholder="Task Priority"
               value={task.priority}
               onChange={(e) => handleTaskChange(index, 'priority', e.target.value)}
-              className="border border-gray-300 px-3 py-2 rounded mr-2 focus:outline-none focus:border-indigo-500"
+              className="border border-gray-300 m-1  px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-50 mr-2 focus:outline-none focus:border-indigo-500"
             />
-            <button onClick={() => removeTask(index)} className="bg-gradient-to-r from-red-500 to-red-600 text-white mt-2 px-6 py-3 rounded-full shadow-md hover:from-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white">
+            <button onClick={() => removeTask(index)} className="bg-gradient-to-r from-stone-500 to-stone-600 text-white mt-2 px-6 py-3 rounded-xl shadow-md hover:from-stone-600 focus:outline-none focus:ring-2 focus:ring-stone-500 focus:ring-offset-2 focus:ring-offset-white">
               Remove Task
             </button>
           </div>
         ))}
-        <button onClick={addTodo} className="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 mt-2 items-center rounded-full shadow-md hover:from-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white">
+        <button onClick={addTodo} className="bg-gradient-to-r from-fuchsia-500 to-fuchsia-600 text-white px-6 py-3 mt-2 items-center rounded-xl shadow-md hover:from-fuchsia-950 focus:outline-none focus:ring-2 focus:ring-fuchsia-900 focus:ring-offset-2 focus:ring-offset-white">
           Add Todo
         </button>
       </div>

@@ -46,7 +46,7 @@ const Task = () => {
 
   const deleteTask = async (taskId) => {
     try {
-      await axios.delete(`http://172.178.104.95/main/delete/`);
+      await axios.delete(`http://172.178.104.95/main/delete`);
       // Update UI after successful deletion
       fetchFormattedTodoList();
     } catch (error) {
@@ -57,11 +57,11 @@ const Task = () => {
   return (
     <div className="container  font-mono mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">ToDo List</h1>
-      <div className="bg-white shadow-2xl ">
+      <div className="bg-slate-300 shadow-2xl ">
         
         <ul className="space-y-4">
           {formattedTodoList.map((todo, index) => (
-            <li key={index} className="p-4 border border-none bg-slate-300 shadow-2xl rounded-lg">
+            <li key={index} className="p-4 border border-none bg-white shadow-2xl rounded-lg">
               <strong>Todo Name:</strong> {todo.todo_name}<br />
               <strong>Created For Date:</strong> {todo.created_for_date}<br />
               <strong>Task List:</strong>
@@ -69,11 +69,11 @@ const Task = () => {
                 {todo.task_list.map((task, taskIndex) => (
                   <li key={taskIndex} className="flex items-center">
                     <span className="mr-2">{task.title} - Priority: {task.priority}</span>
-                    <button className="ml-auto rounded-xl shadow-xl bg-indigo-900 hover:bg-slate-500 text-white font-bold py-1 px-2 focus:outline-none focus:shadow-outline" onClick={() => updateTask(task.id, 'New Title', 'New Priority')}>
+                    <button className="ml-auto rounded-md shadow-xl bg-indigo-900 hover:bg-fuchsia-700 text-white font-bold py-1 px-2 focus:outline-none focus:shadow-outline" onClick={() => updateTask(task.id, 'New Title', 'New Priority')}>
                       Update
                     </button>
-                    <button className="ml-2 bg-black rounded-md shadow-xl hover:bg-red-700 text-white font-bold py-1 px-2 focus:outline-none focus:shadow-outline" onClick={() => deleteTask(task.id)}>
-                      Delete {task.id = 1}
+                    <button className="ml-2 bg-cyan-600 rounded-md shadow-xl hover:bg-cyan-500 text-white font-bold py-1 px-2 focus:outline-none focus:shadow-outline" onClick={() => deleteTask(task.id)}>
+                      Delete 
                     </button>
                   </li>
                 ))}

@@ -67,7 +67,7 @@ const Graph = () => {
   };
 
   return (
-    <div className='bg-white p-4 mt-4 rounded-md stroke-neutral-50 shadow-md'>
+    <div className='bg-white md:p-4 -p-2  md:mt-4 mt-2 rounded-md stroke-neutral-50 shadow-md'>
       <h2 className='font-bold '>Prioritize Tasks done graph</h2>
       {error ? (
         <p style={{ color: 'red' }}>Error: {error.message}</p>
