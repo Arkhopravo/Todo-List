@@ -32,7 +32,7 @@ const Task = () => {
 
   const updateTask = async (taskId, newTitle, newPriority) => {
     try {
-      await axios.post('http://172.178.104.95/main/update', {
+      await axios.put('http://172.178.104.95/main/update', {
         taskId,
         newTitle,
         newPriority
@@ -46,7 +46,7 @@ const Task = () => {
 
   const deleteTask = async (taskId) => {
     try {
-      await axios.delete(`http://172.178.104.95/main/delete/${taskId}`);
+      await axios.delete(`http://172.178.104.95/main/delete/`);
       // Update UI after successful deletion
       fetchFormattedTodoList();
     } catch (error) {
@@ -73,7 +73,7 @@ const Task = () => {
                       Update
                     </button>
                     <button className="ml-2 bg-black rounded-md shadow-xl hover:bg-red-700 text-white font-bold py-1 px-2 focus:outline-none focus:shadow-outline" onClick={() => deleteTask(task.id)}>
-                      Delete
+                      Delete {task.id = 1}
                     </button>
                   </li>
                 ))}
