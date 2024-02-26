@@ -1,65 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Task = () => {
-  const [task, setTask] = useState('');
-  const [tasks, setTasks] = useState([]);
+  const [formattedTodoList, setFormattedTodoList] = useState([]);
 
-  const handleInputChange = (e) => {
-    setTask(e.target.value);
+  useEffect(() => {
+    fetchFormattedTodoList();
+  }, []);
+
+  const fetchFormattedTodoList = async () => {
+    try {
+      const response = await axios.get('http://172.178.104.95/main/get');
+      const formattedTodoList = response.data.map(todo => {
+        return {
+          todo_name: todo.todo_name,
+          created_for_date: todo.created_for_date,
+          task_list: todo.task_list.map(task => {
+            return {
+              title: task.title,
+              priority: task.priority || "",
+              id: task.id // Assuming each task has a unique identifier
+            };
+          })
+        };
+      });
+      setFormattedTodoList(formattedTodoList);
+    } catch (error) {
+      console.error('Error fetching todo list:', error);
+    }
   };
 
-  const handleAddTask = () => {
-    if (task.trim() !== '') {
-      setTasks([...tasks, task]);
-      setTask('');
+  const updateTask = async (taskId, newTitle, newPriority) => {
+    try {
+      await axios.post('http://172.178.104.95/main/update', {
+        taskId,
+        newTitle,
+        newPriority
+      });
+      // Update UI after successful update
+      fetchFormattedTodoList();
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
+  };
+
+  const deleteTask = async (taskId) => {
+    try {
+      await axios.delete(`http://172.178.104.95/main/delete/${taskId}`);
+      // Update UI after successful deletion
+      fetchFormattedTodoList();
+    } catch (error) {
+      console.error('Error deleting task:', error);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-16">
-      <div className="px-4 py-2">
-        <h1 className="text-gray-800 font-bold text-2xl uppercase">To-Do List</h1>
+    <div className="container  font-mono mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4">ToDo List</h1>
+      <div className="bg-white shadow-2xl ">
+        
+        <ul className="space-y-4">
+          {formattedTodoList.map((todo, index) => (
+            <li key={index} className="p-4 border border-none bg-slate-300 shadow-2xl rounded-lg">
+              <strong>Todo Name:</strong> {todo.todo_name}<br />
+              <strong>Created For Date:</strong> {todo.created_for_date}<br />
+              <strong>Task List:</strong>
+              <ul className="list-disc text-balance text-yellow-950 ml-8 space-y-2">
+                {todo.task_list.map((task, taskIndex) => (
+                  <li key={taskIndex} className="flex items-center">
+                    <span className="mr-2">{task.title} - Priority: {task.priority}</span>
+                    <button className="ml-auto rounded-xl shadow-xl bg-indigo-900 hover:bg-slate-500 text-white font-bold py-1 px-2 focus:outline-none focus:shadow-outline" onClick={() => updateTask(task.id, 'New Title', 'New Priority')}>
+                      Update
+                    </button>
+                    <button className="ml-2 bg-black rounded-md shadow-xl hover:bg-red-700 text-white font-bold py-1 px-2 focus:outline-none focus:shadow-outline" onClick={() => deleteTask(task.id)}>
+                      Delete
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
       </div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleAddTask();
-        }}
-        className="w-full max-w-sm mx-auto px-4 py-2"
-      >
-        <div className="flex items-center border-b-2 border-teal-500 py-2">
-          <input
-            value={task}
-            onChange={handleInputChange}
-            className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-            type="text"
-            placeholder="Add a task"
-          />
-          <button
-            className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
-            type="submit"
-          >
-            Add
-          </button>
-        </div>
-      </form>
-      <ul className="divide-y divide-gray-200 px-4">
-        {tasks.map((task, index) => (
-          <li key={index} className="py-4">
-            <div className="flex items-center">
-              <input
-                id={`todo${index}`}
-                name={`todo${index}`}
-                type="checkbox"
-                className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
-              />
-              <label htmlFor={`todo${index}`} className="ml-3 block text-gray-900">
-                <span className="text-lg font-medium">{task}</span>
-              </label>
-            </div>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };

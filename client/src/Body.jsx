@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import CalenderApp from './components/CalenderApp'
 import Graph from './components/Graph'
-
+import Task from './components/Task'
 import ToDoList from './components/ToDoList'
 import Footer from './components/Footer'
 import Mapitems from './components/Mapitems'
@@ -9,16 +9,17 @@ import Map from './components/Map'
 
 
 const Body = () => {
-    const [showTodoList, setShowTodoList] = useState(false);
+  const [isToDoListOpen, setIsToDoListOpen] = useState(false);
+
+  const toggleToDoList = () => {
+    setIsToDoListOpen(!isToDoListOpen);
+  };
 
     const handleAddTaskClick = () => {
         setShowTodoList(true);
       };
     
-      const handleCloseTodoList = () => {
-        setShowTodoList(false);
-      };
-
+    
 
   return (
     <div>
@@ -40,10 +41,11 @@ const Body = () => {
           </div>
           
           <div className=" md:w-2/3 md:p-4">
-            <ToDoList/>
-          {showTodoList && <TodoList  onClose={handleCloseTodoList} />}
+            {/* <ToDoList/> */}
+            {isToDoListOpen && <ToDoList />}
+            <Task/>
             </div>
-      <Footer onAddTaskClick={handleAddTaskClick}/>
+      <Footer  toggleToDoList={toggleToDoList}/>
       </div>
     </div>
   )

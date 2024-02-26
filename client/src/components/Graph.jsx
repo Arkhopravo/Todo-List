@@ -1,30 +1,81 @@
-import React from 'react'
-import { BarChart } from '@mui/x-charts/BarChart';
-import { FaInfoCircle } from "react-icons/fa";
+import React, { useEffect, useState } from 'react';
+import Chart from 'chart.js/auto';
 
 const Graph = () => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null); // Added for error handling
+  const [chartInstance, setChartInstance] = useState(null); // Added to store the Chart instance
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://172.178.104.95/main/bar_chart_data');
+      // Check for successful response status (e.g., 200)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (err) {
+      setError(err); // Store the error for potential display
+      console.error('Error fetching data:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      if (chartInstance) {
+        chartInstance.destroy(); // Destroy existing Chart instance
+      }
+      createChart();
+    }
+  }, [data]);
+
+  const createChart = () => {
+    const labels = Object.keys(data);
+    const datasets = Object.keys(data[labels[0]]);
+
+    const ctx = document.getElementById('myChart');
+    const newChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: datasets.map((dataset) => ({
+          label: dataset,
+          data: labels.map((label) => data[label][dataset]),
+          backgroundColor: `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
+            Math.random() * 256
+          )}, ${Math.floor(Math.random() * 256)}, 0.5)`,
+          borderColor: `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
+            Math.random() * 256
+          )}, ${Math.floor(Math.random() * 256)}, 1)`,
+          borderWidth: 1,
+        })),
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+    setChartInstance(newChartInstance); // Store the new Chart instance
+  };
+
   return (
-    <div className=' ml-40 sm:ml-28 md:ml-20 py-6 mt-10 text-sm bg-slate-100 md:w-full h-1/4 md:h-full'>
-      <h1 className="items-center pl-6 font-bold text-sm sm:text-l flex justify-between ">
-        Prioritize task done grap
-        <FaInfoCircle className='mr-8' />
-      </h1>
-      <BarChart 
-  xAxis={[{ scaleType: 'band', data: ['first quarter', '2nd quarter', 'third quarter'] }]}
-  
-  series={[
-    { data: [4,3,5], stack: 'A', label: 'P1' },
-    { data: [1,6,3], stack: 'B', label: 'P2' },
-    { data: [2,7,5], stack: 'C', label: 'P3' },
-
-    ]}
-   
-  height={200}
-  width={400}
-  
-/>
+    <div className='bg-white p-4 mt-4 rounded-md stroke-neutral-50 shadow-md'>
+      <h2 className='font-bold '>Prioritize Tasks done graph</h2>
+      {error ? (
+        <p style={{ color: 'red' }}>Error: {error.message}</p>
+      ) : (
+        <canvas id="myChart" width="400" height="400"></canvas>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Graph
+export default Graph;
